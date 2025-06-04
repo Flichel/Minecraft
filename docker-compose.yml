@@ -1,0 +1,57 @@
+#SERVICIOS DEFINIDOS
+#services Define los servicios que se ejecutarán. En este caso, hay solo uno llamado minecraft.
+services:
+  minecraft:
+
+    image: itzg/minecraft-server
+#IMAGEN DEL CONTENEDOR
+#Usa la imagen itzg/minecraft-server, una imagen popular para ejecutar servidores de Minecraft.
+
+#VOLUMENES
+    volumes:
+      - minecraftdata:/data
+      - C:/Users/fmarq/Videos/Minecraft/plugins:/data/plugins
+#Define volúmenes, que son áreas persistentes donde se guardan datos aunque se detenga el contenedor.
+#minecraftdata:/data significa que el volumen llamado minecraftdata 
+#se monta en el contenedor en /data (donde el servidor guarda su mundo, configuración, etc.)
+#Esto montaría la carpeta de plugins local al contenedor.
+
+    ports:
+      - 25565:25565
+#PUERTOS
+#Abre el puerto 25565 del contenedor y lo enlaza al mismo puerto del host. 
+#Este es el puerto por defecto de Minecraft.
+
+
+    environment:
+      EULA: "TRUE"
+      TYPE: "PAPER"
+      VERSION: "1.20.1"
+      OPS: "ButterNPants"
+      ENABLE_WHITELIST: "TRUE"
+      ENFORCE_WHITELIST: "TRUE"
+#VARIABLES DE ENTORNO
+#Configura variables de entorno para el servidor:
+#EULA: "TRUE": Acepta los términos de la licencia de Minecraft (obligatorio para que arranque).
+#TYPE: "BUKKIT": Usa la versión de Minecraft con soporte para plugins.
+#OPS: Jugadores con permisos de operador. Aquí, "ButterNPants".
+#ENABLE_WHITELIST: Activa la lista blanca (solo usuarios permitidos pueden entrar).
+#ENFORCE_WHITHELIST: Asegura que solo los de la whitelist puedan entrar
+
+
+    tty: true
+    stdin_open: true
+#OTROS PARAMETROS
+#Permite una consola interactiva si deseas conectarte al contenedor manualmente.
+
+    restart: unless-stopped
+#Hace que el contenedor se reinicie automáticamente a menos que lo detengas explícitamente.
+
+volumes:
+  minecraftdata:
+    external: true
+#Indica que el volumen minecraftdata ya existe fuera de Docker Compose (fue creado previamente).
+
+
+
+
